@@ -1,0 +1,158 @@
+/* Page wrapper / header */
+.page-wrapper {
+  padding: 60px 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.page-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #1e293b;
+}
+
+.page-header p {
+  font-size: 15px;
+  color: #64748b;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Form section (shared) */
+.form-section {
+  background: linear-gradient(to right, #ffffff, #f1f5f9);
+  padding: 30px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  margin: 0 auto 50px auto;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  max-width: 750px;
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.05);
+}
+
+.form-section input,
+.form-section select {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  min-width: 200px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.form-section input:focus,
+.form-section select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.form-section button {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.form-section button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(59, 130, 246, 0.25);
+}
+
+/* Cards grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+/* Item card (used in Materias & Tareas) */
+.item-card {
+  position: relative;
+  padding: 24px;
+  border-radius: 18px;
+  border: 2px solid;
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.4s ease forwards;
+  opacity: 0;
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+}
+
+.item-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20px;
+  width: 5px;
+  height: 60%;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #3b82f6, #2563eb);
+}
+
+.item-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+.item-card h4 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.item-card p {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.card-accent {
+  position: absolute;
+  left: 0;
+  top: 20px;
+  width: 6px;
+  height: 60%;
+  border-radius: 8px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.badge {
+  background-color: #22c55e;
+  color: white;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
