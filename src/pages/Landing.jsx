@@ -1,22 +1,17 @@
 import { Link } from "react-router-dom";
-import "../styles/components/Layout.css";
-import "../styles/components/Card.css";
+import { Container, Card } from "../components/Layout";
 
 function Landing() {
   return (
-    <div className="container">
-        <div className="card">
-            <h1>StudyConnect</h1>
-            <p>
-             Organiza tus materias, tareas y colabora con otros estudiantes 
-             en un solo lugar.
-            </p>
-
-      <Link to="/login">
-        <button>Iniciar Sesión</button>
-      </Link>
-      </div>
-    </div>
+    <Container>
+      <Card>
+        <h1>StudyConnect</h1>
+        <p>Organiza tus materias, tareas y colabora con otros estudiantes en un solo lugar.</p>
+        <Link to="/login">
+          <button>Iniciar Sesión</button>
+        </Link>
+      </Card>
+    </Container>
   );
 }
 

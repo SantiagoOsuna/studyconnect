@@ -1,13 +1,29 @@
 import { useState, useEffect } from "react";
-import "../styles/pages/Pages.css";
+import MateriasView from "../components/MateriasView";
 
 function Materias() {
   const [materias, setMaterias] = useState([]);
   const [nuevaMateria, setNuevaMateria] = useState("");
 
+  const colors = [
+    { bg: "#eff6ff", accent: "#3b82f6" },
+    { bg: "#ecfdf5", accent: "#10b981" },
+    { bg: "#fef3c7", accent: "#f59e0b" },
+    { bg: "#fce7f3", accent: "#ec4899" },
+    { bg: "#ede9fe", accent: "#8b5cf6" },
+  ];
+
   useEffect(() => {
     const data = localStorage.getItem("materias");
-    if (data) setMaterias(JSON.parse(data));
+    if (data) {
+      const parsed = JSON.parse(data);
+      const migrated = parsed.map((m) => {
+        if (typeof m.colorIndex === "number") return m;
+        const idx = colors.findIndex((c) => c.accent === m.accent || c.bg === m.bg);
+        return { ...m, colorIndex: idx >= 0 ? idx : 0 };
+      });
+      setMaterias(migrated);
+    }
   }, []);
 
   useEffect(() => {
@@ -15,76 +31,26 @@ function Materias() {
   }, [materias]);
 
   const agregarMateria = () => {
-    if (nuevaMateria.trim() === "") return;
+    const nombre = nuevaMateria.trim();
+    if (!nombre) return;
 
     const nueva = {
       id: Date.now(),
-      nombre: nuevaMateria,
+      nombre,
+      colorIndex: materias.length % colors.length,
     };
 
-    setMaterias([...materias, nueva]);
+    setMaterias((prev) => [...prev, nueva]);
     setNuevaMateria("");
   };
 
-  const colors = [
-  { bg: "#eff6ff", accent: "#3b82f6" },
-  { bg: "#ecfdf5", accent: "#10b981" },
-  { bg: "#fef3c7", accent: "#f59e0b" },
-  { bg: "#fce7f3", accent: "#ec4899" },
-  { bg: "#ede9fe", accent: "#8b5cf6" },
-];
-
-const getColor = (index) => colors[index % colors.length];
-
-
-
   return (
-    <div className="page-wrapper">
-      <div className="page-header">
-        <h2>📚 Materias</h2>
-        <p>Organiza tus materias activas</p>
-      </div>
-
-      <div className="form-section">
-        <input
-          type="text"
-          placeholder="Nombre de la materia"
-          value={nuevaMateria}
-          onChange={(e) => setNuevaMateria(e.target.value)}
-        />
-        <button onClick={agregarMateria}>Agregar</button>
-      </div>
-
-      <div className="cards-grid">
-        {materias.map((materia, index) => {
-        const color = getColor(index);
-
-    return (
-      <div
-        key={materia.id}
-        className="item-card"
-        style={{
-          backgroundColor: color.bg,
-          borderColor: color.accent,
-          animationDelay: `${index * 0.1}s`
-        }}
-      >
-        <div
-          className="card-accent"
-          style={{ backgroundColor: color.accent }}
-        ></div>
-
-        <div className="card-header">
-          <h4>{materia.nombre}</h4>
-          <span className="badge">Activa</span>
-        </div>
-
-        <p>Materia activa</p>
-      </div>
-        );
-        })}
-        </div>
-    </div>
+    <MateriasView
+      materias={materias}
+      nuevaMateria={nuevaMateria}
+      onNuevaChange={setNuevaMateria}
+      onAdd={agregarMateria}
+    />
   );
 }
 

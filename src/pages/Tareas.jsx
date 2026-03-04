@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import "../styles/pages/Pages.css";
+import TareasView from "../components/TareasView";
 
 function Tareas() {
   const [tareas, setTareas] = useState([]);
   const [materias, setMaterias] = useState([]);
+
   const [titulo, setTitulo] = useState("");
-  const [materiaId, setMateriaId] = useState("");
+  const [descripcion, setDescripcion] = useState("");
   const [fecha, setFecha] = useState("");
+  const [materiaId, setMateriaId] = useState("");
 
   useEffect(() => {
     const tareasGuardadas = localStorage.getItem("tareas");
@@ -21,72 +23,47 @@ function Tareas() {
   }, [tareas]);
 
   const agregarTarea = () => {
-    if (!titulo || !materiaId || !fecha) return;
+    const t = titulo.trim();
+    if (!t) return;
 
     const nueva = {
       id: Date.now(),
-      titulo,
-      materiaId,
+      titulo: t,
+      descripcion: descripcion.trim(),
       fecha,
+      materiaId,
     };
 
-    setTareas([...tareas, nueva]);
+    setTareas((prev) => [...prev, nueva]);
     setTitulo("");
-    setMateriaId("");
+    setDescripcion("");
     setFecha("");
+    setMateriaId("");
   };
 
-  const obtenerNombreMateria = (id) => {
-    const materia = materias.find((m) => m.id == id);
-    return materia ? materia.nombre : "";
+  const onChangeField = (field, value) => {
+    if (field === "titulo") setTitulo(value);
+    if (field === "descripcion") setDescripcion(value);
+    if (field === "fecha") setFecha(value);
+    if (field === "materiaId") setMateriaId(value);
   };
+
+  const tareasParaMostrar = tareas.map((t) => ({
+    ...t,
+    materia: materias.find((m) => m.id == t.materiaId)?.nombre || "",
+  }));
 
   return (
-    <div className="page-wrapper">
-      <div className="page-header">
-        <h2>📝 Tareas</h2>
-        <p>Gestiona tus entregas académicas</p>
-      </div>
-
-      <div className="form-section">
-        <input
-          type="text"
-          placeholder="Título de la tarea"
-          value={titulo}
-          onChange={(e) => setTitulo(e.target.value)}
-        />
-
-        <select
-          value={materiaId}
-          onChange={(e) => setMateriaId(e.target.value)}
-        >
-          <option value="">Seleccionar materia</option>
-          {materias.map((m) => (
-            <option key={m.id} value={m.id}>
-              {m.nombre}
-            </option>
-          ))}
-        </select>
-
-        <input
-          type="date"
-          value={fecha}
-          onChange={(e) => setFecha(e.target.value)}
-        />
-
-        <button onClick={agregarTarea}>Agregar</button>
-      </div>
-
-      <div className="cards-grid">
-        {tareas.map((tarea) => (
-          <div key={tarea.id} className="item-card">
-            <h4>{tarea.titulo}</h4>
-            <p>Materia: {obtenerNombreMateria(tarea.materiaId)}</p>
-            <p>Entrega: {tarea.fecha}</p>
-          </div>
-        ))}
-      </div>
-    </div>
+    <TareasView
+      tareas={tareasParaMostrar}
+      titulo={titulo}
+      descripcion={descripcion}
+      fecha={fecha}
+      materiaId={materiaId}
+      materias={materias}
+      onChangeField={onChangeField}
+      onAdd={agregarTarea}
+    />
   );
 }
 

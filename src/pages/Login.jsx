@@ -1,60 +1,53 @@
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import "../styles/components/Layout.css";
-import "../styles/components/Card.css";
+import AuthForm from "../components/AuthForm";
 
 function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({ email: "", password: "" });
+
+  const handleChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleLogin = (e) => {
-  e.preventDefault();
+    e.preventDefault();
+    const storedUser = JSON.parse(localStorage.getItem("user"));
 
-  const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (!storedUser) {
+      alert("No hay usuario registrado");
+      return;
+    }
 
-  if (!storedUser) {
-    alert("No hay usuario registrado");
-    return;
-  }
+    if (
+      formData.email === storedUser.email &&
+      formData.password === storedUser.password
+    ) {
+      localStorage.setItem("isAuthenticated", "true");
+      navigate("/dashboard");
+    } else {
+      alert("Correo o contraseña incorrectos");
+    }
+  };
 
-  if (
-    email === storedUser.email &&
-    password === storedUser.password
-  ) {
-    localStorage.setItem("isAuthenticated", "true");
-    navigate("/dashboard");
-  } else {
-    alert("Correo o contraseña incorrectos");
-  }
-};
+  const fields = [
+    { name: "email", type: "email", placeholder: "Correo electrónico" },
+    { name: "password", type: "password", placeholder: "Contraseña" },
+    { name: "remember", type: "checkbox", placeholder: "Recuérdame" },
+    
+  ];
 
   return (
-    <div className="container">
-      <div className="card">
-        <h2>Bienvenido</h2>
-
-        <form onSubmit={handleLogin}>
-          <input
-            type="email"
-            placeholder="Correo electrónico"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
-          <input
-            type="password"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-
-          <button type="submit">Ingresar</button>
-
-          <p>¿No tienes cuenta? <Link to="/register">Regístrate aquí</Link></p>
-        </form>
-      </div>
-    </div>
+    <AuthForm
+      title="Bienvenido"
+      fields={fields}
+      formData={formData}
+      handleChange={handleChange}
+      handleSubmit={handleLogin}
+      buttonText="Ingresar"
+      linkText={{ text: "¿No tienes cuenta?", link: "Regístrate aquí" }}
+      linkUrl="/register"
+    />
   );
 }
 

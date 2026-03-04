@@ -1,65 +1,50 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import AuthForm from "../components/AuthForm";
 
 function Register() {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    nombre: "",
+    email: "",
+    password: "",
+  });
 
-  const [nombre, setNombre] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const handleChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleRegister = (e) => {
     e.preventDefault();
 
-    if (!nombre || !email || !password) {
+    if (!formData.nombre || !formData.email || !formData.password) {
       alert("Todos los campos son obligatorios");
       return;
     }
 
-    const user = { nombre, email, password };
-
+    const user = { ...formData };
     localStorage.setItem("user", JSON.stringify(user));
-
     alert("Usuario registrado correctamente");
     navigate("/login");
   };
 
+  const fields = [
+    { name: "nombre", type: "text", placeholder: "Nombre completo" },
+    { name: "email", type: "email", placeholder: "Correo electrónico" },
+    { name: "password", type: "password", placeholder: "Contraseña" },
+  ];
+
   return (
-    <div className="container">
-      <div className="card">
-        <h2>Crear Cuenta</h2>
-
-        <form onSubmit={handleRegister}>
-          <input
-            type="text"
-            placeholder="Nombre completo"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-          />
-
-          <input
-            type="email"
-            placeholder="Correo electrónico"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
-          <input
-            type="password"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-
-          <button type="submit">Registrarme</button>
-
-          <p>
-            ¿Ya tienes cuenta?{" "}
-            <Link to="/login">Inicia sesión</Link>
-          </p>
-        </form>
-      </div>
-    </div>
+    <AuthForm
+      title="Crear Cuenta"
+      fields={fields}
+      formData={formData}
+      handleChange={handleChange}
+      handleSubmit={handleRegister}
+      buttonText="Registrarme"
+      linkText={{ text: "¿Ya tienes cuenta?", link: "Inicia sesión" }}
+      linkUrl="/login"
+    />
   );
 }
 
