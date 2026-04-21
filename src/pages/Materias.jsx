@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
 import MateriasView from "../components/MateriasView";
+import {
+  getSubjects,
+  createSubject,
+  deleteSubject
+} from "../services/subjectService";
 
 function Materias() {
   const [materias, setMaterias] = useState([]);
@@ -13,35 +18,64 @@ function Materias() {
     { bg: "#ede9fe", accent: "#8b5cf6" },
   ];
 
+  // 🔥 GET desde backend
   useEffect(() => {
-    const data = localStorage.getItem("materias");
-    if (data) {
-      const parsed = JSON.parse(data);
-      const migrated = parsed.map((m) => {
-        if (typeof m.colorIndex === "number") return m;
-        const idx = colors.findIndex((c) => c.accent === m.accent || c.bg === m.bg);
-        return { ...m, colorIndex: idx >= 0 ? idx : 0 };
-      });
-      setMaterias(migrated);
-    }
+    const fetchData = async () => {
+      try {
+        const data = await getSubjects();
+
+        const mapped = data.map((m, index) => ({
+          id: m.id,
+          nombre: m.name,
+          colorIndex: index % colors.length
+        }));
+
+        setMaterias(mapped);
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("materias", JSON.stringify(materias));
-  }, [materias]);
-
-  const agregarMateria = () => {
+  // ➕ AGREGAR
+  const agregarMateria = async () => {
     const nombre = nuevaMateria.trim();
     if (!nombre) return;
 
-    const nueva = {
-      id: Date.now(),
-      nombre,
-      colorIndex: materias.length % colors.length,
-    };
+    try {
+      const color = colors[materias.length % colors.length].accent;
 
-    setMaterias((prev) => [...prev, nueva]);
-    setNuevaMateria("");
+      const nueva = await createSubject(nombre, color);
+
+      setMaterias((prev) => [
+        ...prev,
+        {
+          id: nueva.id,
+          nombre: nueva.name,
+          colorIndex: prev.length % colors.length
+        }
+      ]);
+
+      setNuevaMateria("");
+
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  // ❌ ELIMINAR
+  const eliminarMateria = async (id) => {
+    try {
+      await deleteSubject(id);
+
+      setMaterias((prev) => prev.filter((m) => m.id !== id));
+
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (
@@ -50,6 +84,7 @@ function Materias() {
       nuevaMateria={nuevaMateria}
       onNuevaChange={setNuevaMateria}
       onAdd={agregarMateria}
+      onDelete={eliminarMateria}
     />
   );
 }

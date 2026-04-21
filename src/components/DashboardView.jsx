@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import "../styles/pages/Dashboard.css";
+import "../styles/components/Modal.css";
 
-function DashboardView({ onLogout }) {
+function DashboardView({ onLogout, onEditUser, onDeleteUser }) {
   return (
     <div className="dashboard-layout">
       <div className="sidebar">
@@ -21,6 +22,13 @@ function DashboardView({ onLogout }) {
       <div className="main-content">
         <div className="navbar">
           <h3>Panel Principal</h3>
+          <button className="btn-edit" onClick={onEditUser}>
+            Editar Perfil
+          </button>
+
+          <button className="btn-delete" onClick={onDeleteUser}>
+            Eliminar Cuenta
+          </button>
           <p>Hola, Estudiante</p>
         </div>
 

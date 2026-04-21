@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { login } from "../services/authService";
 import AuthForm from "../components/AuthForm";
 
 function Login() {
@@ -10,25 +11,25 @@ function Login() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+  const handleLogin = async (e) => {
+  e.preventDefault();
 
-    if (!storedUser) {
-      alert("No hay usuario registrado");
-      return;
-    }
+  console.log("CLICK LOGIN");
 
-    if (
-      formData.email === storedUser.email &&
-      formData.password === storedUser.password
-    ) {
-      localStorage.setItem("isAuthenticated", "true");
-      navigate("/dashboard");
-    } else {
-      alert("Correo o contraseña incorrectos");
-    }
-  };
+   try {
+    const res = await login(formData.email, formData.password);
+    console.log("RESPUESTA:", res);
+
+    console.log("ANTES DE NAVIGAR");
+
+navigate("/dashboard");
+
+console.log("DESPUÉS DE NAVIGAR");
+  } catch (error) {
+    console.log("ERROR:", error);
+    alert(error.message);
+  }
+};
 
   const fields = [
     { name: "email", type: "email", placeholder: "Correo electrónico" },

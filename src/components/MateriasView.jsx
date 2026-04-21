@@ -1,7 +1,7 @@
 import "../styles/pages/Pages.css";
 import ItemCard from "./ItemCard";
 
-function MateriasView({ materias = [], nuevaMateria = "", onNuevaChange, onAdd }) {
+function MateriasView({ materias = [], nuevaMateria = "", onNuevaChange, onAdd, onDelete }) {
   return (
     <div className="page-wrapper">
       <div className="page-header">
@@ -23,6 +23,10 @@ function MateriasView({ materias = [], nuevaMateria = "", onNuevaChange, onAdd }
         {materias.map((materia, index) => (
           <ItemCard key={materia.id} title={materia.nombre} className={`color-${materia.colorIndex ?? (index % 5)}`}>
             <p>Activa</p>
+          
+          <button onClick={() => onDelete(materia.id)}>
+            Eliminar
+          </button>
           </ItemCard>
         ))}
       </div>

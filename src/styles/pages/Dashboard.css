@@ -95,3 +95,28 @@
 .dashboard-card:hover {
   transform: translateY(-5px);
 }
+
+/* BOTÓN EDITAR */
+.btn-edit {
+  width: auto;
+  padding: 8px 16px;
+  background-color: #10b981; /* verde */
+  border-radius: 8px;
+  margin-right: 10px;
+}
+
+.btn-edit:hover {
+  background-color: #059669;
+}
+
+/* BOTÓN ELIMINAR */
+.btn-delete {
+  width: auto;
+  padding: 8px 16px;
+  background-color: #ef4444; /* rojo */
+  border-radius: 8px;
+}
+
+.btn-delete:hover {
+  background-color: #dc2626;
+}
