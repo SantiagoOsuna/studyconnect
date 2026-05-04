@@ -1,18 +1,8 @@
-import { Link } from "react-router-dom";
-import { Container, Card } from "../components/Layout";
+﻿import LandingView from "../components/LandingView";
 
 function Landing() {
-  return (
-    <Container>
-      <Card>
-        <h1>StudyConnect</h1>
-        <p>Organiza tus materias, tareas y colabora con otros estudiantes en un solo lugar.</p>
-        <Link to="/login">
-          <button>Iniciar Sesión</button>
-        </Link>
-      </Card>
-    </Container>
-  );
+  return <LandingView />;
 }
 
 export default Landing;
+
