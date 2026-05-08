@@ -4,7 +4,6 @@ function DashboardView({ onLogout, onEditUser, onDeleteUser }) {
   return (
     <div className="flex min-h-screen bg-gray-100">
 
-      {/* SIDEBAR */}
       <aside className="w-64 bg-slate-900 text-white flex flex-col p-6">
 
         <h2 className="text-2xl font-bold mb-10 tracking-tight">
@@ -29,7 +28,6 @@ function DashboardView({ onLogout, onEditUser, onDeleteUser }) {
 
         </nav>
 
-        {/* LOGOUT */}
         <button
           onClick={onLogout}
           className="mt-auto bg-red-500 hover:bg-red-600 transition py-3 rounded-lg font-semibold"
@@ -38,10 +36,8 @@ function DashboardView({ onLogout, onEditUser, onDeleteUser }) {
         </button>
       </aside>
 
-      {/* MAIN */}
       <div className="flex-1 flex flex-col">
 
-        {/* NAVBAR */}
         <header className="bg-white shadow-sm px-8 py-4 flex justify-between items-center">
           
           <h3 className="text-xl font-semibold text-gray-800">
@@ -70,10 +66,8 @@ function DashboardView({ onLogout, onEditUser, onDeleteUser }) {
           </div>
         </header>
 
-        {/* CONTENT */}
         <main className="p-8 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
 
-          {/* CARD */}
           <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
             <h4 className="text-lg font-semibold mb-2">📚 Materias</h4>
             <p className="text-gray-600 text-sm mb-4">
@@ -87,7 +81,6 @@ function DashboardView({ onLogout, onEditUser, onDeleteUser }) {
             </Link>
           </div>
 
-          {/* CARD */}
           <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
             <h4 className="text-lg font-semibold mb-2">📝 Actividades</h4>
             <p className="text-gray-600 text-sm mb-4">
@@ -101,7 +94,6 @@ function DashboardView({ onLogout, onEditUser, onDeleteUser }) {
             </Link>
           </div>
 
-          {/* CARD */}
           <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
             <h4 className="text-lg font-semibold mb-2">📅 Eventos</h4>
             <p className="text-gray-600 text-sm mb-4">
@@ -115,7 +107,6 @@ function DashboardView({ onLogout, onEditUser, onDeleteUser }) {
             </Link>
           </div>
 
-          {/* CARD */}
           <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
             <h4 className="text-lg font-semibold mb-2">👤 Perfil</h4>
             <p className="text-gray-600 text-sm mb-4">

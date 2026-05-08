@@ -4,23 +4,19 @@ function ConfirmModal({ isOpen, onClose, onConfirm }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
 
-      {/* OVERLAY */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      {/* MODAL */}
       <div className="relative bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm mx-4 animate-fadeIn">
 
-        {/* ICON */}
         <div className="flex justify-center mb-4">
           <div className="bg-red-100 text-red-600 p-3 rounded-full text-xl">
             ⚠️
           </div>
         </div>
 
-        {/* TEXT */}
         <h3 className="text-lg font-semibold text-center text-gray-800">
           ¿Eliminar usuario?
         </h3>
@@ -29,7 +25,6 @@ function ConfirmModal({ isOpen, onClose, onConfirm }) {
           Esta acción no se puede deshacer
         </p>
 
-        {/* BUTTONS */}
         <div className="flex gap-3 mt-6">
 
           <button
