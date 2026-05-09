@@ -11,10 +11,16 @@ import {
 function ActivitiesContainer() {
   const { subjectId } = useParams();
   const [activities, setActivities] = useState([]);
-  const [newActivity, setNewActivity] = useState("");
+  const [newActivity, setNewActivity] = useState({
+    title: "",
+    description: "",
+    due_date: "",
+    status: "pending",
+  });
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
   const [editDescription, setEditDescription] = useState("");
+  const [editDueDate, setEditDueDate] = useState("");
   const [editStatus, setEditStatus] = useState("pending");
 
   useEffect(() => {
@@ -32,20 +38,34 @@ function ActivitiesContainer() {
     }
   };
 
-  const handleAdd = async () => {
-    if (!newActivity.trim()) return;
+  const handleNewActivityChange = (field, value) => {
+    setNewActivity((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
-    try {
-      const created = await createActivity({
-        subject_id: subjectId,
-        title: newActivity,
+  const handleAdd = async () => {
+  if (!newActivity.title.trim()) return;
+
+  try {
+    const created = await createActivity({
+      subject_id: Number(subjectId),
+      title: newActivity.title,
+      description: newActivity.description,
+      due_date: newActivity.due_date,
+      status: newActivity.status,
+    });
+
+    setActivities((prev) => [...prev, created]);
+
+      setNewActivity({
+        title: "",
         description: "",
-        due_date: new Date().toISOString().split("T")[0],
+        due_date: "",
         status: "pending",
       });
 
-      setActivities((prev) => [...prev, created]);
-      setNewActivity("");
     } catch (error) {
       console.error(error);
     }
@@ -53,8 +73,14 @@ function ActivitiesContainer() {
 
   const handleEdit = (activity) => {
     setEditingId(activity.id);
+
     setEditText(activity.title);
     setEditDescription(activity.description || "");
+    setEditDueDate(
+      activity.due_date
+        ? activity.due_date.split("T")[0]
+        : ""
+    );
     setEditStatus(activity.status);
   };
 
@@ -63,7 +89,7 @@ function ActivitiesContainer() {
       const updated = await updateActivity(id, {
         title: editText,
         description: editDescription,
-        due_date: new Date().toISOString().split("T")[0],
+        due_date: editDueDate,
         status: editStatus,
       });
 
@@ -88,7 +114,7 @@ function ActivitiesContainer() {
     <ActivitiesView
       activities={activities}
       newActivity={newActivity}
-      onChange={setNewActivity}
+      onNewActivityChange={handleNewActivityChange}
       onAdd={handleAdd}
       onDelete={handleDelete}
       onEdit={handleEdit}
@@ -100,6 +126,8 @@ function ActivitiesContainer() {
       setEditDescription={setEditDescription}
       editStatus={editStatus}
       setEditStatus={setEditStatus}
+      editDueDate={editDueDate}
+      setEditDueDate={setEditDueDate}
     />
   );
 }

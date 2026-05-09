@@ -1,7 +1,7 @@
 function EventsView({
   events,
-  newTitle,
-  setNewTitle,
+  newEvent,
+  onNewEventChange,
   onAdd,
   onEdit,
   onUpdate,
@@ -13,6 +13,8 @@ function EventsView({
   setEditDescription,
   editStatus,
   setEditStatus,
+  editDueDate,
+  setEditDueDate,
 }) {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -26,22 +28,55 @@ function EventsView({
         </p>
       </div>
 
-      <div className="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-sm mb-10 flex gap-4 flex-wrap">
-        <input
-          type="text"
-          placeholder="Nuevo evento..."
-          value={newTitle}
-          onChange={(e) => setNewTitle(e.target.value)}
-          className="flex-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+      <div className="flex flex-col gap-4 w-full">
 
-        <button
-          onClick={onAdd}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition"
-        >
-          Agregar
-        </button>
-      </div>
+      <input
+        type="text"
+        placeholder="Título del evento"
+        value={newEvent.title}
+        onChange={(e) =>
+          onNewEventChange("title", e.target.value)
+        }
+        className="px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+
+      <textarea
+        placeholder="Descripción"
+        value={newEvent.description}
+        onChange={(e) =>
+          onNewEventChange("description", e.target.value)
+        }
+        className="px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+
+      <input
+        type="date"
+        value={newEvent.due_date}
+        onChange={(e) =>
+          onNewEventChange("due_date", e.target.value)
+        }
+        className="px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+
+      <select
+        value={newEvent.status}
+        onChange={(e) =>
+          onNewEventChange("status", e.target.value)
+        }
+        className="px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="pending">Pendiente</option>
+        <option value="completed">Completado</option>
+      </select>
+
+      <button
+        onClick={onAdd}
+        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition"
+      >
+        Agregar evento
+      </button>
+
+    </div>
 
       <div className="max-w-4xl mx-auto grid gap-4">
 
@@ -71,6 +106,13 @@ function EventsView({
                   value={editDescription}
                   onChange={(e) => setEditDescription(e.target.value)}
                   placeholder="Descripción"
+                  className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+
+                <input
+                  type="date"
+                  value={editDueDate}
+                  onChange={(e) => setEditDueDate(e.target.value)}
                   className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
 

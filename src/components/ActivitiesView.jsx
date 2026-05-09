@@ -1,7 +1,7 @@
 function ActivitiesView({
   activities,
   newActivity,
-  onChange,
+  onNewActivityChange,
   onAdd,
   onDelete,
   onEdit,
@@ -13,6 +13,8 @@ function ActivitiesView({
   setEditDescription,
   editStatus,
   setEditStatus,
+  editDueDate,
+  setEditDueDate,
 }) {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -26,22 +28,55 @@ function ActivitiesView({
         </p>
       </div>
 
-      <div className="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-sm mb-10 flex gap-4 flex-wrap">
-        <input
-          type="text"
-          placeholder="Nueva actividad..."
-          value={newActivity}
-          onChange={(e) => onChange(e.target.value)}
-          className="flex-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+      <div className="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-sm mb-10 flex flex-col gap-4">
 
-        <button
-          onClick={onAdd}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition"
-        >
-          Agregar
-        </button>
-      </div>
+      <input
+        type="text"
+        placeholder="Título de la actividad"
+        value={newActivity.title}
+        onChange={(e) =>
+          onNewActivityChange("title", e.target.value)
+        }
+        className="px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+
+      <textarea
+        placeholder="Descripción"
+        value={newActivity.description}
+        onChange={(e) =>
+          onNewActivityChange("description", e.target.value)
+        }
+        className="px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+
+      <input
+        type="date"
+        value={newActivity.due_date}
+        onChange={(e) =>
+          onNewActivityChange("due_date", e.target.value)
+        }
+        className="px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+
+      <select
+        value={newActivity.status}
+        onChange={(e) =>
+          onNewActivityChange("status", e.target.value)
+        }
+        className="px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="pending">Pendiente</option>
+        <option value="completed">Completada</option>
+      </select>
+
+      <button
+        onClick={onAdd}
+        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition"
+      >
+        Agregar actividad
+      </button>
+
+    </div>
 
       <div className="max-w-4xl mx-auto grid gap-4">
 
@@ -65,6 +100,13 @@ function ActivitiesView({
                   value={editDescription}
                   onChange={(e) => setEditDescription(e.target.value)}
                   placeholder="Descripción"
+                  className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+
+                <input
+                  type="date"
+                  value={editDueDate}
+                  onChange={(e) => setEditDueDate(e.target.value)}
                   className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
 

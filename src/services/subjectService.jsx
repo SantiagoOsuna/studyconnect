@@ -1,13 +1,8 @@
-const API_URL = "http://localhost:3000/api/subjects";
+import { API_BASE_URL, getAuthHeaders } from "./apiConfig";
 
-const getHeaders = () => {
-  const token = localStorage.getItem("token");
+const API_URL = `${API_BASE_URL}/subjects`;
 
-  return {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`
-  };
-};
+const getHeaders = getAuthHeaders;
 
 // GET
 export const getSubjects = async () => {

@@ -1,9 +1,8 @@
-const API_URL = "http://localhost:3000/api/activities";
+import { API_BASE_URL, getAuthHeaders } from "./apiConfig";
 
-const getHeaders = () => ({
-  "Content-Type": "application/json",
-  Authorization: `Bearer ${localStorage.getItem("token")}`,
-});
+const API_URL = `${API_BASE_URL}/activities`;
+
+const getHeaders = getAuthHeaders;
 
 // Obtener actividades por materia
 export const getActivities = async (subjectId) => {

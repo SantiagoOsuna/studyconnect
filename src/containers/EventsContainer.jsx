@@ -9,10 +9,16 @@ import {
 
 function EventsContainer() {
   const [events, setEvents] = useState([]);
-  const [newTitle, setNewTitle] = useState("");
+  const [newEvent, setNewEvent] = useState({
+    title: "",
+    description: "",
+    due_date: "",
+    status: "pending",
+  });
   const [editingId, setEditingId] = useState(null);
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
+  const [editDueDate, setEditDueDate] = useState("");
   const [editStatus, setEditStatus] = useState("pending");
 
   useEffect(() => {
@@ -28,19 +34,34 @@ function EventsContainer() {
     }
   };
 
+  const handleNewEventChange = (field, value) => {
+    setNewEvent((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
   const handleAdd = async () => {
-    if (!newTitle.trim()) return;
+    if (!newEvent.title.trim()) return;
 
     try {
       const created = await createEvent({
-        title: newTitle,
-        description: "",
-        due_date: new Date().toISOString().split("T")[0],
-        status: "pending",
+        user_id: 1,
+        title: newEvent.title,
+        description: newEvent.description,
+        due_date: newEvent.due_date,
+        status: newEvent.status,
       });
 
       setEvents((prev) => [...prev, created]);
-      setNewTitle("");
+
+      setNewEvent({
+        title: "",
+        description: "",
+        due_date: "",
+        status: "pending",
+      });
+
     } catch (error) {
       console.error(error);
     }
@@ -48,8 +69,14 @@ function EventsContainer() {
 
   const handleEdit = (event) => {
     setEditingId(event.id);
+
     setEditTitle(event.title);
     setEditDescription(event.description || "");
+    setEditDueDate(
+      event.due_date
+        ? event.due_date.split("T")[0]
+        : ""
+    );
     setEditStatus(event.status);
   };
 
@@ -58,7 +85,7 @@ function EventsContainer() {
       const updated = await updateEvent(id, {
         title: editTitle,
         description: editDescription,
-        due_date: new Date().toISOString().split("T")[0],
+        due_date: editDueDate,
         status: editStatus,
       });
 
@@ -81,8 +108,8 @@ function EventsContainer() {
   return (
     <EventsView
       events={events}
-      newTitle={newTitle}
-      setNewTitle={setNewTitle}
+      newEvent={newEvent}
+      onNewEventChange={handleNewEventChange}
       onAdd={handleAdd}
       onEdit={handleEdit}
       onUpdate={handleUpdate}
@@ -94,6 +121,8 @@ function EventsContainer() {
       setEditDescription={setEditDescription}
       editStatus={editStatus}
       setEditStatus={setEditStatus}
+      editDueDate={editDueDate}
+      setEditDueDate={setEditDueDate}
     />
   );
 }

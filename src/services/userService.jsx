@@ -1,12 +1,6 @@
-const API_URL = "http://localhost:3000/api/users";
+import { API_BASE_URL, getAuthHeaders } from "./apiConfig";
 
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("token");
-  return {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`
-  };
-};
+const API_URL = `${API_BASE_URL}/users`;
 
 export const updateUser = async (id, data) => {
   const response = await fetch(`${API_URL}/${id}`, {
