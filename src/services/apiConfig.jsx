@@ -1,4 +1,4 @@
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://295tji0qyh.execute-api.us-east-1.amazonaws.com/api";
 
 export const getAuthHeaders = () => ({
   "Content-Type": "application/json",
