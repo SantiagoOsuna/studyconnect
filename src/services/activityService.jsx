@@ -6,16 +6,12 @@ const getHeaders = getAuthHeaders;
 
 // Obtener actividades por materia
 export const getActivities = async (subjectId) => {
-    console.log("SUBJECT ID:", subjectId);
-
     const res = await fetch(`${API_URL}/${subjectId}`, {
         method: "GET",
         headers: getHeaders(),
     });
 
     const data = await res.json();
-
-    console.log("DATA BACK:", data);
 
   if (!res.ok) throw new Error("Error al obtener actividades");
 

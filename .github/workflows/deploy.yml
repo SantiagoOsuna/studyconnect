@@ -1,0 +1,90 @@
+name: Build and Deploy to AWS
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run ESLint
+      run: npm run lint
+
+    - name: Build project
+      run: npm run build
+      env:
+        VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+        VITE_ENV: production
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: dist
+        path: dist/
+        retention-days: 5
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Download build artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: dist
+        path: dist/
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    # Descomentar la opción que uses:
+
+    # Opción 1: Desplegar a S3 + CloudFront
+    # - name: Deploy to S3
+    #   run: |
+    #     aws s3 sync dist/ s3://${{ secrets.S3_BUCKET }}/ --delete
+    #     aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+
+    # Opción 2: Desplegar a Elastic Beanstalk
+    - name: Deploy to Elastic Beanstalk
+      run: |
+        pip install awsebcli --upgrade --user
+        eb init -p "Node.js 18 running on 64bit AL2" studyconnect --region ${{ env.AWS_REGION }} --profile default
+        eb deploy studyconnect-env --profile default
+
+    - name: Deployment Notification
+      if: success()
+      run: echo "✅ Deployment completado exitosamente"
+
+    - name: Deployment Failed
+      if: failure()
+      run: echo "❌ El deployment falló"

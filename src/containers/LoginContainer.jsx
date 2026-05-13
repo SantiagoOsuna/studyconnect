@@ -14,16 +14,10 @@ function LoginContainer() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    console.log("CLICK LOGIN");
-
     try {
-      const res = await login(formData.email, formData.password);
-      console.log("RESPUESTA:", res);
-      console.log("ANTES DE NAVEGAR");
+      await login(formData.email, formData.password);
       navigate("/dashboard");
-      console.log("DESPUÉS DE NAVIGAR");
     } catch (error) {
-      console.log("ERROR:", error);
       alert(error.message);
     }
   };
@@ -37,7 +31,6 @@ function LoginContainer() {
     <AuthForm
       title="Bienvenido"
       fields={fields}
-      bu
       formData={formData}
       handleChange={handleChange}
       handleSubmit={handleLogin}

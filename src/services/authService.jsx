@@ -13,8 +13,6 @@ export const login = async (email, password) => {
 
   const data = await response.json();
 
-  console.log("DATA BACK:", data);
-
   if (!response.ok) {
     throw new Error(data.message || "Error en login");
   }
@@ -36,8 +34,6 @@ export const register = async (name, email, password) => {
   });
 
   const data = await response.json();
-
-  console.log("REGISTER BACK:", data);
 
   if (!response.ok) {
     throw new Error(data.message || "Error en registro");
